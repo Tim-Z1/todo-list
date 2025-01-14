@@ -1,22 +1,22 @@
 {
-  "name": "restaurant-page",
+  "name": "todo-list",
   "version": "1.0.0",
-  "description": "Practicing Webpack",
+  "description": "TOP Project",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Tim-Z1/restaurant-page.git"
+    "url": "git+https://github.com/Tim-Z1/todo-list.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Tim-Z1/restaurant-page/issues"
+    "url": "https://github.com/Tim-Z1/todo-list/issues"
   },
-  "homepage": "https://github.com/Tim-Z1/restaurant-page#readme",
+  "homepage": "https://github.com/Tim-Z1/todo-list#readme",
   "devDependencies": {
     "css-loader": "^7.1.2",
     "html-loader": "^5.1.0",
