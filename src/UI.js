@@ -1,12 +1,8 @@
 //make some code to display the toDoList
-export const displayToDoList = function (arr) {
+export const createToDoListString = function(arr) {
     let str = '<ul>';
-
-    // let titleMapped = arr.map(function(item, index, array) {
-    //     // returns the new value instead of item
-    //     return item.title;
-    // });
     let i = 0;
+
     arr.forEach(function(item, index, array) {
         str += `<li> 
             title: ${item.title} 
@@ -17,21 +13,63 @@ export const displayToDoList = function (arr) {
             <button class='delete-btn' data-arrayID=${i}> Delete </button>
         </li>`;  
         i++;
-        
-        // console.log(`arr item: ${item.title}`);
-        // console.log('index' + index);
-        // console.log('str value: ' + str);
     });
     
-    str += '</ul>';
+    return str += '</ul>';
+    // return str;
+}
+
+export const createButtonObjectString = function(arr) {
+    let defaultProjectsBtnList = ''; 
+    let createdProjectsBtnList = ''; 
+    let i = 0;
+    arr.forEach(item => {
+        if (item.isDefaultProject) {
+            defaultProjectsBtnList += 
+                ` <button class='default-project-tab' data-id='${i}'> ${item.projectName} </button> `;
+                i++;
+        } else {
+            createdProjectsBtnList += 
+            ` <div class='project-btn-container'>
+                <button class='project-tab' data-id='${i}'> ${item.projectName} </button>
+                <button class='delete-project-btn' data-id='${i}'> X </button> 
+              </div>`;
+            i++;
+        }
+    });
+    return {defaultProjectsBtnList, createdProjectsBtnList};
+}
+
+export const resetInputFieldValues = function(arrInput, singleInput) {
+    arrInput.forEach(item => item.value = '');
+
+    singleInput.value = 'Medium';
+}
+
+export const toggleAddTaskBar = function(taskBar, addTaskBtn) {
+    //maybe I can use a ternary operator or switch statement instead of show and hide function
+    function showTaskBar() {
+        taskBar.style.display = 'block';
+        addTaskBtn.style.display = 'none';
+    };
+
+    function hideTaskBar() {
+        taskBar.style.display = 'none';
+        addTaskBtn.style.display = 'block';
+    };
     
-    return str;
+    return {showTaskBar, hideTaskBar};
 }
 
 
 
-// arr = [ {title: 'test', description: 'test2'}, {title:'another', description: 'something'} ]
 
-// arr.forEach(function(item) {
-//     console.log(item);
-// })
+
+//example output of createButtonObjectString
+let buttonString = {defaultProjectsBtnList: '<button>inbox</button>', createdProjectsBtnList: '<button>new project</button>'};
+
+//don't need this function atm but keeping it in case for now
+// export const resetDialogInputValues = function(arr) {
+//     arr.forEach(item => item.value = '');
+// }
+//     // resetDialogInputValues([taskTitle, taskDescription, taskDueDate, taskPriority]);

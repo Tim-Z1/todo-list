@@ -7,9 +7,7 @@
     <link rel="icon" type="image/x-icon" href="./images/homeImages/noodles-icon.png">
 </head>
 <body>
-    <header>
-        <h1>Todo List</h1>
-    </header>
+    <header> <h1>Todo List</h1> </header>
 
     <dialog>
         <div class="dialog-header">
@@ -48,26 +46,29 @@
 
     <div id="content">
         <div class="sidebar">
-            <button class="inbox-btn">Inbox</button>
+            <div class="default-projects-buttons"></div>
 
-            <h3>Projects</h3>
-            <div class="created-projects"></div>
+            <div class="created-projects-container">
+                <h3>Projects</h3>
+                <div class="created-projects-buttons"></div>
+            </div>
+
             <button class="add-project-btn">+ Add Project</button>
         </div>
 
         <div class="main">
-            <div class="to-do-list">
-                <h2 class="h2">Inbox</h2>
+            <div class="todo-list-container">
+                <h2 class="todo-list-header">Inbox</h2>
 
-                <div class="list-container">
+                <div class="todo-list-content">
                     <ul>
-                        <li>Buy Milk</li>
+                        <!-- <li>Buy Milk</li> -->
                     </ul>
                 </div>                
             </div>
             <button class="main-add-task-btn"> + Add Task </button> 
-            <div class="task-box">
-                <form>
+            <div class="task-bar">
+                <form class="form-task-bar">
                     <input class='task-title' type="text" placeholder="Task title">
                     <input class='task-description' type="text" placeholder="Task description">
 

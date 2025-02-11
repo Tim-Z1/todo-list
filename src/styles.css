@@ -5,21 +5,33 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-
-    padding-left: 3vw;
+    font-size: 1.1rem;
 }
-
+button {
+    font-size: 1.1rem;
+}
 #content {
     flex-grow: 1;
     display: flex;
 }
+header {
+    border-bottom: 1px solid black;
+    padding-left: 3vw;
+
+}
 footer {
     display: flex;
     justify-content: space-between;
+    padding: 0 2vw;
+    border-top: 1px solid black;
+
 }
 .sidebar {
     display: flex;
     flex-direction: column;
+    border-right: 1px solid black;
+    padding: 1rem 3rem;
+
 }
 .main {
     flex-grow: 1;
@@ -37,4 +49,14 @@ footer {
 }
 li:hover {
     background-color: lightgrey;
+}
+
+.task-bar { 
+    /* initial state is to hide taskBar for taskBar and addTask btn interaction*/
+    display: none;
+}
+
+.created-projects-buttons {
+    display: flex;
+    flex-direction: column;
 }
