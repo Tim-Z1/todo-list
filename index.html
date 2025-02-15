@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo List</title>
+    <link rel="icon" type="image/x-icon" href="6d763af249d85ef35ef4.png">
+<script defer src="main.js"></script></head>
+<body>
+    <header> <h1>Todo List</h1> </header>
+
+    <dialog>
+        <div class="dialog-header">
+            <h2>Edit Task</h2>
+            <input class="X-btn" type="submit" aria-label="close" value="X" name="Xbutton" formnovalidate />
+        </div>
+        <hr>
+        <form method="dialog">
+            <div>
+                <label for="task-title">Title</label>
+                <input type="text" id="dialog-task-title">
+            </div>
+            <div>
+                <label for="description">Description</label>
+                <input type="text" id="dialog-task-description">
+            </div>
+            <div>
+                <label for="due-date">Due Date</label>
+                <input type="date" id="dialog-due-date">
+            </div>
+            
+            <label for="priority">Priority Level</label>
+            <select id="dialog-priority">
+                <option value="High">High</option>
+                <option value="Medium">Medium</option>
+                <option value="Low">Low</option>
+            </select>
+
+            <hr>
+            <div>
+                <input type="submit" class="save-btn" value="Save">
+                <input class="dialog-cancel-btn" type="submit" aria-label="cancel" value="Cancel" name="cancelBtn" formnovalidate />    
+            </div>
+        </form>
+    </dialog>
+
+    <div id="content">
+        <div class="sidebar">
+            <div class="default-projects-buttons"></div>
+
+            <div class="created-projects-container">
+                <h3>Projects</h3>
+                <div class="created-projects-buttons"></div>
+            </div>
+
+            <button class="add-project-btn">+ Add Project</button>
+        </div>
+
+        <div class="main">
+            <div class="todo-list-container">
+                <h2 class="todo-list-header">Inbox</h2>
+
+                <div class="todo-list-content">
+                    <ul>
+                        <!-- <li>Buy Milk</li> -->
+                    </ul>
+                </div>                
+            </div>
+            <button class="main-add-task-btn"> + Add Task </button> 
+            <div class="task-bar">
+                <form class="form-task-bar">
+                    <input class='task-title' type="text" placeholder="Task title">
+                    <input class='task-description' type="text" placeholder="Task description">
+
+                    <label for='due-date'>Due Date: </label>
+                    <input class='task-due-date'type="date">
+
+                    <label for='Priority-Level'>Priority Level: </label>
+                    <select class='task-priority-level' name="Priority Level">
+                        <optgroup label="Priority Level">
+                            <option value="High">High</option>
+                            <option value="Medium" selected='selected'>Medium</option>
+                            <option value="Low">Low</option>
+                        </optgroup>
+                    </select>
+
+                    <button type="button" class="add-task-btn">Add Task</button>
+                    <button type="button" class="task-cancel-btn">Cancel</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>Todo List</p>
+        <p>@2024 Todo List, all rights reserved</p>
+    </footer>
+</body>
+</html>
