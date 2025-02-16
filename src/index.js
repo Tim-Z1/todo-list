@@ -86,6 +86,10 @@ function getStorageArrValues() {
 
 (function initialiseWebPage() {
     document.addEventListener("DOMContentLoaded", () => {
+        if (!localStorage.getItem("localArr")) {
+            updateStorageArrValues();
+        }
+        
         toDoListArr = getStorageArrValues();
 
         defaultProjectsBtns.innerHTML = getDefaultProjectButtons();
