@@ -1,9 +1,3 @@
-import './styles.css'
-import { 
-    createToDoListString, createButtonObjectString, resetInputFieldValues, toggleAddTaskBar
-} from './UI';
-import { createTask } from './task';
-
 //sidebar content selectors
 const createdProjectsBtns = document.querySelector('.created-projects-buttons');
 const defaultProjectsBtns = document.querySelector('.default-projects-buttons');
@@ -14,15 +8,14 @@ const toDoListHeader = document.querySelector('.todo-list-header');
 const toDoListContent = document.querySelector('.todo-list-content');
 const taskBar = document.querySelector('.task-bar');
 
-const titleInput = document.querySelector('.task-title');
-const descriptionInput = document.querySelector('.task-description');
-const dueDateInput = document.querySelector('.task-due-date');
-const priorityInput = document.querySelector('.task-priority-level');
+const titleInput = document.querySelector('#task-title');
+const descriptionInput = document.querySelector('#task-description');
+const dueDateInput = document.querySelector('#task-due-date');
+const priorityInput = document.querySelector('#task-priority-level');
 
 const addTaskBtn = document.querySelector('.add-task-btn');
 const mainAddTaskBtn = document.querySelector('.main-add-task-btn');
 const cancelBtn = document.querySelector('.task-cancel-btn');
-
 
 //dialog selectors
 const dialog = document.querySelector('dialog');
@@ -33,10 +26,38 @@ const taskPriority = document.querySelector('#dialog-priority');
 const dialogSaveBtn = document.querySelector('.save-btn');
 
 
-//---SECTION FOR KEEPING TRACK ON THINGS TO WORK ON 
-//to work on: written 14/1/25 -- 1. functionality to delete individual tasks(done)  1.2 functionality to delete projects(done)       2. make the code better organised          3. css styling       4. add local storage functionality（done)
+    /*---SECTION FOR KEEPING TRACK ON THINGS TO WORK ON   
+---TASKS TO BE COMPLETED:  
+-make the code better organised (and separate UI code from core functionality code)   
+-css styling      
 
-//Make sure your app doesn’t crash if the data you may want to retrieve from localStorage isn’t there!
+-if nothing is entered in task inputs (form task bar) and 'add task' btn is clicked, it should show a msg that says can't have input fields empty 
+-ability to edit project names    
+-ability to set completion status for a task
+---------------
+*how the todolist webapp should look:
+View all todos in each project (probably just the title and duedate… perhaps changing color for different priorities).
+Expand a single todo to see/edit its details.
+
+**possible optional future features:
+-ability to drag and swap the order of tasks being displayed  
+
+
+---Completed Tasks:
+-functionality to delete individual tasks(done)
+-functionality to delete projects(done)
+-add local storage functionality（done)
+-app won't work if data in localStorage doesn't exist (done)
+*/
+
+    //--Module Imports
+import './styles.css'
+import { 
+    createToDoListString, createButtonObjectString, resetInputFieldValues, getTaskBarParameters
+} from './UI';
+import { 
+    createTask, 
+} from './task';
 
 
 let toDoListArr = [ 
@@ -47,16 +68,9 @@ let toDoListArr = [
     }, 
 ];
 
-/*note: for these event listeners, 
-    it doesn't seem to work to put imported module functions directly as the 2nd argument in the event listener parameter,
-    but it works when I use an arrow function to call the imported module function
-*/
-mainAddTaskBtn.addEventListener('click', () => {
-    toggleAddTaskBar(taskBar, mainAddTaskBtn).showTaskBar();
-});
-cancelBtn.addEventListener('click', () => {
-    toggleAddTaskBar(taskBar, mainAddTaskBtn).hideTaskBar() 
-});
+let toggleTaskBarUI = getTaskBarParameters(taskBar, mainAddTaskBtn);
+mainAddTaskBtn.addEventListener('click', (toggleTaskBarUI.show) );
+cancelBtn.addEventListener('click', (toggleTaskBarUI.hide) );
 
 //convenience feature (pressing Enter button to submit)
 titleInput.addEventListener("keypress", function(event) {
@@ -69,46 +83,50 @@ titleInput.addEventListener("keypress", function(event) {
 
 
 //--SECTION START OF MAIN FUNCTIONS
-const getToDoListString = () => createToDoListString(toDoListArr[projectTabDataID].projectContent);
-const getDefaultProjectButtons = () => createButtonObjectString(toDoListArr).defaultProjectsBtnList;
-const getCreatedProjectButtons = () => createButtonObjectString(toDoListArr).createdProjectsBtnList;
+    //generate strings for HTML content 
+function stringsForUI() {
+    const toDoList = () => createToDoListString(toDoListArr[projectTabDataID].projectContent);
+    const defaultProjectButtons = () => createButtonObjectString(toDoListArr).defaultProjectsBtnList;
+    const createdProjectButtons = () => createButtonObjectString(toDoListArr).createdProjectsBtnList;
 
-
-function updateStorageArrValues() {
-    localStorage.setItem( "localArr", JSON.stringify(toDoListArr) );
+    return {toDoList, defaultProjectButtons, createdProjectButtons};
 }
+let getStringFor = stringsForUI();
 
-// taskTitle.onchange = populateStorage;
+    //local storage functions
+const updateStorageArrValues = () => localStorage.setItem( "localArr", JSON.stringify(toDoListArr) );
+const getStorageArrValues = () => JSON.parse( localStorage.getItem( "localArr") );
 
-function getStorageArrValues() {
-    return JSON.parse( localStorage.getItem( "localArr") );
-}
+
 
 (function initialiseWebPage() {
     document.addEventListener("DOMContentLoaded", () => {
         if (!localStorage.getItem("localArr")) {
             updateStorageArrValues();
         }
-        
         toDoListArr = getStorageArrValues();
 
-        defaultProjectsBtns.innerHTML = getDefaultProjectButtons();
-        createdProjectsBtns.innerHTML = getCreatedProjectButtons();
-        let projectTabList = Array.from(document.querySelectorAll('.project-tab')); 
-        projectTabList.forEach((item) => {
-            item.addEventListener('click', tabIntoProject);
-        });
+            //project buttons
+                //html content
+        defaultProjectsBtns.innerHTML = getStringFor.defaultProjectButtons();
+        createdProjectsBtns.innerHTML = getStringFor.createdProjectButtons();
+                //event listeners
+        addTabIntoProjectEventListener();
         addDeleteProjectBtnEventListener();
 
+            //todo list page 
+                //html content
         toDoListHeader.textContent = toDoListArr[0].projectName;
-        toDoListContent.innerHTML = ( createToDoListString( toDoListArr[0].projectContent) );
-
+        toDoListContent.innerHTML = ( getStringFor.toDoList() );
+                //event listeners
         document.querySelector('.default-project-tab').addEventListener('click', tabIntoProject);
         addEditBtnEventListener();
         addDeleteBtnEventListener();
     });
 })();
 
+
+    //dialog box functions
 function getDialogTaskValues() { 
     let dialogBoxSelectorsArr = [taskTitle, taskDescription, taskDueDate, taskPriority];
     let dialogBoxTaskValuesArr = [];
@@ -116,9 +134,11 @@ function getDialogTaskValues() {
     
     return dialogBoxTaskValuesArr;
 };
+
 function updateTaskContent(arr) {
     let updatedTaskInfoArr = getDialogTaskValues();
     let i = 0;
+        //loops through an array's keys (in our case, a specified projectContent array: title, description etc.)
     Object.keys(arr).forEach((key) => {
         arr[key] = updatedTaskInfoArr[i];
         i++;
@@ -144,17 +164,29 @@ function prefillDialogValues(arr) {
 
 dialogSaveBtn.addEventListener('click', () => {
     updateTaskContent(toDoListArr[projectTabDataID].projectContent[arrayItemEditID]);
-    toDoListContent.innerHTML = getToDoListString();
+    updateStorageArrValues();
+
+    toDoListContent.innerHTML = getStringFor.toDoList();
+
     addEditBtnEventListener();
     addDeleteBtnEventListener();
 });
 
+
+//adding event listeners to groups of html classes
+function addTabIntoProjectEventListener() {
+    let projectTabList = Array.from(document.querySelectorAll('.project-tab')); 
+    projectTabList.forEach((item) => {
+        item.addEventListener('click', tabIntoProject);
+    });
+}
+    
 addTaskBtn.addEventListener('click', function() {
     let newTask = createTask(titleInput.value, descriptionInput.value, dueDateInput.value, priorityInput.value);
     toDoListArr[projectTabDataID].projectContent.push(newTask);
 
     updateStorageArrValues();
-    toDoListContent.innerHTML = getToDoListString();
+    toDoListContent.innerHTML = getStringFor.toDoList();
 
     resetInputFieldValues([titleInput, descriptionInput, dueDateInput], priorityInput);
     addEditBtnEventListener();
@@ -185,7 +217,7 @@ function addDeleteBtnEventListener() {
 
             updateStorageArrValues();
 
-            toDoListContent.innerHTML = getToDoListString();
+            toDoListContent.innerHTML = getStringFor.toDoList();
 
             addDeleteBtnEventListener();
             addEditBtnEventListener();
@@ -219,13 +251,9 @@ addProjectBtn.addEventListener('click', () => {
     console.log(toDoListArr);
     
     updateStorageArrValues();
-    createdProjectsBtns.innerHTML = getCreatedProjectButtons();
+    createdProjectsBtns.innerHTML = getStringFor.createdProjectButtons();
 
-    let projectTabList = Array.from(document.querySelectorAll('.project-tab')); 
-    projectTabList.forEach((item) => {
-        item.addEventListener('click', tabIntoProject);
-    })
-
+    addTabIntoProjectEventListener();
     addDeleteProjectBtnEventListener();
 
 });
@@ -236,9 +264,9 @@ function tabIntoProject(e) {
     // console.log('dataID is '+ dataID);
     toDoListHeader.textContent = toDoListArr[projectTabDataID].projectName;
 
-    toDoListContent.innerHTML = ( createToDoListString( toDoListArr[projectTabDataID].projectContent) );
+    toDoListContent.innerHTML = ( getStringFor.toDoList() );
 
-    toggleAddTaskBar(taskBar, mainAddTaskBtn).hideTaskBar()
+    toggleTaskBarUI.hide();
     addEditBtnEventListener();
     addDeleteBtnEventListener();
 }
@@ -251,18 +279,80 @@ function addDeleteProjectBtnEventListener() {
             toDoListArr.splice(deleteItemID, 1);
             updateStorageArrValues();
 
-            createdProjectsBtns.innerHTML = getCreatedProjectButtons();
-            addDeleteProjectBtnEventListener();
+            createdProjectsBtns.innerHTML = getStringFor.createdProjectButtons();
 
-            let projectTabList = Array.from(document.querySelectorAll('.project-tab')); 
-            projectTabList.forEach((item) => {
-                item.addEventListener('click', tabIntoProject);
-            })
+            addDeleteProjectBtnEventListener();
+            addTabIntoProjectEventListener();
         })
     });
 }
 
+/* Pseudocode / Code logic flow (todo list)
+-General Overview- (local storage is also utilised)
+1. An 'Inbox' project is created and is the default project container for users to enter in todo list tasks
+2. You can add, delete and edit tasks
+3. You can create new project containers and name them whatever you like 
+4. You can also delete any project containers if you wish to except for the default one ('Inbox')
+5. (to be implemented) You can also edit the name of any project (except 'Inbox')
 
+
+--How the above features are implemented--
+
+->How data in Javascript is stored to be manipulated later<-
+    -A 'todolist' array is created that contains all the data for displaying what's needed for this todolist webapp
+        -the todolist array contains one object per project container: 
+        *(e.g. toDoListArr = {Inbox}, {Project 1}, {Project 2} etc.)*
+            -inside of every object is a projectName and projectContent key/value pair
+                -projectName is as the name implies, a string of the project's name
+                -projectContent contains data necessary for displaying todo list information/tasks
+                    -inside of projectContent is an array with one object per task (e.g. buy milk, wash dishes, study etc.)
+                        -inside of the projectContent array every object has the following key/value pairs: title, description, dueDate, priority
+                        *(e.g. Inbox's projectContent: [ {title: 'buy milk' etc.}, {title: 'study' etc.} ])*
+
+->Adding Tasks<-
+    -(event listener) when 'Add Task' btn is clicked:
+        -takes in user input for the following parameters: taskTitle, description, dueDate, priority
+        -creates a new object inside of currently tabbed in projects' projectContent array and adds said input into the newly created object
+
+->Deleting Tasks<-
+    -(event listener) when 'Delete' btn is clicked:
+        -finds the correct 'task'
+        -deletes the 'task' from the currently tabbed in projects' projectContent array
+
+->Editing Tasks<-
+    -(event listener) when 'Edit' btn is clicked:
+        -finds the correct 'task'
+        -opens up a dialog box 
+            -takes in user input for the following parameters: taskTitle, description, dueDate, priority
+                -clicking 'Save' btn updates the currently selected task by changing the data in the currently tabbed projects' projectContent array
+                -clicking 'Cancel' btn closes dialog box with no changes to be updated
+
+->Adding Projects<-
+    -(event listener) when 'Add Project' btn is clicked: 
+        -takes in user input for projectName
+            -if OK is clicked then a new object is created in toDoList array with the user input string as the new object's projectName value
+        
+->Deleting Projects<-
+    -(event listener) when 'X' btn is clicked:
+        -finds the correct currently tabbed into project
+            -deletes the project from toDoList array (i.e. deletes the object associated to it)
+
+->Editing Projects Name(NOT YET IMPLEMENTED)<-
+    -(event listener) when 'Edit' btn is clicked: 
+        -opens up a user prompt for user input
+        -takes in user prompt input
+            -if OK is clicked then the currently selected project for edit is changed to a new name according to the user prompt input
+
+->Switching between projects<-
+    -(event listener) when a 'project' btn is clicked:
+        -the appropriate project in toDoList array is selected
+        -it takes that project's data and displays its todo list content (i.e. projectContent)
+        -edit and delete event listener btns are re-added for each todo list task
+
+->How the HTML is structured<-
+
+->Displaying content in HTML<-
+*/
 
 /*  notes/old code
 
@@ -280,4 +370,5 @@ let test = function(arr) {
 // taskDueDate.value = toDoListArr[projectTabDataID].projectContent[arrayItemEditID].dueDate;
 // taskPriority.value = toDoListArr[projectTabDataID].projectContent[arrayItemEditID].priority;
 
+// taskTitle.onchange = populateStorage;
 */

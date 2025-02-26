@@ -4,7 +4,8 @@ export const createToDoListString = function(arr) {
     let i = 0;
 
     arr.forEach(function(item, index, array) {
-        str += `<li> 
+        str += 
+        `<li> 
             title: ${item.title} 
             description: ${item.description} 
             due date: ${item.dueDate} 
@@ -46,19 +47,18 @@ export const resetInputFieldValues = function(arrInput, singleInput) {
     singleInput.value = 'Medium';
 }
 
-export const toggleAddTaskBar = function(taskBar, addTaskBtn) {
-    //maybe I can use a ternary operator or switch statement instead of show and hide function
-    function showTaskBar() {
+export const getTaskBarParameters = function(taskBar, addTaskBtn) {
+    function show() {
         taskBar.style.display = 'block';
         addTaskBtn.style.display = 'none';
     };
 
-    function hideTaskBar() {
+    function hide() {
         taskBar.style.display = 'none';
         addTaskBtn.style.display = 'block';
     };
     
-    return {showTaskBar, hideTaskBar};
+    return {show, hide};
 }
 
 

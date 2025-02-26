@@ -7,76 +7,94 @@
     <link rel="icon" type="image/x-icon" href="./images/homeImages/noodles-icon.png">
 </head>
 <body>
-    <header> <h1>Todo List</h1> </header>
+    <header>
+        <h1>Todo List</h1> 
+    </header>
 
-    <dialog>
-        <div class="dialog-header">
-            <h2>Edit Task</h2>
-            <input class="X-btn" type="submit" aria-label="close" value="X" name="Xbutton" formnovalidate />
-        </div>
-        <hr>
-        <form method="dialog">
-            <div>
-                <label for="task-title">Title</label>
-                <input type="text" id="dialog-task-title">
+    <dialog class="edit-task-menu">
+        <form method="dialog" class="dialog-form">
+            <div class="dialog-header">
+                <h2>Edit Task</h2>
+                <input 
+                    class="X-btn" type="submit" aria-label="close" 
+                    value="X" name="Xbutton" formnovalidate 
+                />
             </div>
-            <div>
-                <label for="description">Description</label>
-                <input type="text" id="dialog-task-description">
-            </div>
-            <div>
-                <label for="due-date">Due Date</label>
-                <input type="date" id="dialog-due-date">
-            </div>
-            
-            <label for="priority">Priority Level</label>
-            <select id="dialog-priority">
-                <option value="High">High</option>
-                <option value="Medium">Medium</option>
-                <option value="Low">Low</option>
-            </select>
 
-            <hr>
-            <div>
+                <hr>
+            <div class="dialog-content">
+                <div class="title">
+                    <label for="dialog-task-title">Title</label>
+                    <input type="text" id="dialog-task-title">
+                </div>
+
+                <div class="description">
+                    <label for="dialog-task-description">Description</label>
+                    <input type="text" id="dialog-task-description">
+                </div>
+
+                <div class="due-date">
+                    <label for="dialog-due-date">Due Date</label>
+                    <input type="date" id="dialog-due-date">
+                </div>
+
+                <div class="priority">
+                    <label for="dialog-priority">Priority Level</label>
+                    <select id="dialog-priority">
+                        <option value="High">High</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Low">Low</option>
+                    </select>
+                </div>
+            </div>
+                <hr>
+
+            <div class="dialog-footer">
                 <input type="submit" class="save-btn" value="Save">
                 <input class="dialog-cancel-btn" type="submit" aria-label="cancel" value="Cancel" name="cancelBtn" formnovalidate />    
             </div>
         </form>
     </dialog>
 
-    <div id="content">
+    <div id="main-content">
         <div class="sidebar">
-            <div class="default-projects-buttons"></div>
+            <div class="default-projects-container">
+                <div class="default-projects-buttons">
+                    <!-- content will be filled in via JS file -->
+                </div>
+            </div>
 
             <div class="created-projects-container">
                 <h3>Projects</h3>
-                <div class="created-projects-buttons"></div>
+                <div class="created-projects-buttons">
+                    <!-- content will be filled in via JS file -->
+                </div>
             </div>
-
             <button class="add-project-btn">+ Add Project</button>
         </div>
 
         <div class="main">
             <div class="todo-list-container">
-                <h2 class="todo-list-header">Inbox</h2>
-
+                <h2 class="todo-list-header"> <!-- to be filled in via JS file --> </h2>
                 <div class="todo-list-content">
                     <ul>
-                        <!-- <li>Buy Milk</li> -->
+                        <!-- to be filled in via JS file -->
                     </ul>
                 </div>                
             </div>
+
             <button class="main-add-task-btn"> + Add Task </button> 
+
             <div class="task-bar">
                 <form class="form-task-bar">
-                    <input class='task-title' type="text" placeholder="Task title">
-                    <input class='task-description' type="text" placeholder="Task description">
+                    <input id='task-title' type="text" placeholder="Task title">
+                    <input id='task-description' type="text" placeholder="Task description">
 
-                    <label for='due-date'>Due Date: </label>
-                    <input class='task-due-date'type="date">
+                    <label for='task-due-date'>Due Date: </label>
+                    <input id='task-due-date'type="date">
 
-                    <label for='Priority-Level'>Priority Level: </label>
-                    <select class='task-priority-level' name="Priority Level">
+                    <label for='task-priority-level'>Priority Level: </label>
+                    <select id='task-priority-level' name="Priority Level">
                         <optgroup label="Priority Level">
                             <option value="High">High</option>
                             <option value="Medium" selected='selected'>Medium</option>
