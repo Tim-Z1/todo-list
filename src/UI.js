@@ -47,7 +47,7 @@ export const resetInputFieldValues = function(arrInput, singleInput) {
     singleInput.value = 'Medium';
 }
 
-export const getTaskBarParameters = function(taskBar, addTaskBtn) {
+export const initialiseToggleTaskBarUI = function(taskBar, addTaskBtn) {
     function show() {
         taskBar.style.display = 'block';
         addTaskBtn.style.display = 'none';
